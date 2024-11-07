@@ -21,7 +21,7 @@ jobs:
       - id: check_pr
         name: Check PR list
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           ref: ${{ github.ref_name }}
         run: |
           if [[ $ref == 'dev' ]]; then
@@ -47,7 +47,7 @@ jobs:
       - name: Create PR dev into homolog
         env:
           repo: ${{ inputs.repository }}
-          GITHUB_TOKEN: ${{ github.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
             reviewers=$(gh api "repos/$repo/collaborators?permission=admin" --jq '[.[] | .login] | join(",")')
             gh pr create -B homolog -H dev --title "Merge branch dev -> homolog - Criado Automatico" --body "Criado Automaticamente" --reviewer "$reviewers"
@@ -65,7 +65,7 @@ jobs:
       - name: Create PR homolog into prod  
         env:
           repo: ${{ inputs.repository }}
-          GITHUB_TOKEN: ${{ github.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
             reviewers=$(gh api "repos/$repo/collaborators?permission=admin" --jq '[.[] | .login] | join(",")')
             gh pr create -B prod -H homolog --title "Merge branch homolog -> prod - Criado Automatico" --body "Criado Automaticamente" --reviewer "$reviewers"
